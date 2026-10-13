@@ -80,9 +80,8 @@ footer{color:var(--t2);font-size:14px;padding:48px 0}
 .ef select{font:inherit;font-size:13px;padding:3px 6px;border:1px solid var(--b);border-radius:6px;background:#fff}
 .f.empty{display:none}body.editing .f.empty{display:grid}
 body.editing .val:empty:before,body.editing .who:empty:before,body.editing h3:empty:before{content:"(vazio, clique para escrever)";color:#B9B6B1}
-</style>
-
 body:not(.editing) .star{cursor:default;pointer-events:none}body:not(.editing) .star:not(.on){visibility:hidden}
+</style>
 </head>
 <body>
 <div class="wrap hero">
@@ -160,7 +159,7 @@ function cardHTML(c,list,opts){
 }
 function render(){
   link();const by={};D.ads.forEach(a=>{(by[a._c]=by[a._c]||[]).push(a)});
-  const ps=D.personas,cl=D.clusters.filter(c=>c['Código']).slice().sort((a,b)=>String(a['Código'])[0]===String(b['Código'])[0]?num(a)-num(b):0),TOTAL=cl.length;
+  const ps=D.personas,cl=D.clusters.filter(c=>c['Código']).slice().sort((a,b)=>String(a['Código'])[0].localeCompare(String(b['Código'])[0])||num(a)-num(b)),TOTAL=cl.length;
   const opts=ps.map(p=>'<optgroup label="'+esc(p['Nome curto'])+'">'+cl.filter(c=>c['ICP']===p['Persona']).map(c=>'<option value="'+esc(c['Código'])+'">'+esc(c['Código'])+' · '+esc(nameOf(c))+'</option>').join('')+'</optgroup>').join('');
   main.innerHTML=ps.map(p=>{const cs=cl.filter(c=>c['ICP']===p['Persona']);const ww=cs.filter(c=>(by[c['Código']]||[]).length).length;const na=cs.reduce((s,c)=>s+(by[c['Código']]||[]).length,0);
     return '<section class="persona" id="'+esc(p['Letra'])+'"><div class="ph"><h2 class="ed" data-p="Título">'+md(p['Título'])+'</h2><p class="ed" data-p="Introdução">'+md(p['Introdução'])+'</p><p class="pcov"><b>'+ww+' de '+cs.length+'</b> clusters trabalhados · <b>'+na+'</b> anúncios</p></div><div class="grid">'+cs.map(c=>cardHTML(c,by[c['Código']]||[],opts)).join('')+'<button class="addc">+ Novo cluster em '+esc(p['Nome curto'])+'</button></div></section>'}).join('');
